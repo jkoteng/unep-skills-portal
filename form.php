@@ -1,21 +1,34 @@
-<?php include('db.php'); 
-if(isset($_POST['submit'])) {
-    $index = $_POST['index_number'];
-    $name = $_POST['full_names'];
-    $email = $_POST['email'];
-    $loc = $_POST['current_location'];
-    $edu = $_POST['education_level'];
-    $duty = $_POST['duty_station'];
-    $remote = $_POST['remote_work'];
-    $soft = $_POST['software_expertise'];
-    $level = $_POST['expertise_level'];
-    $lang = $_POST['language'];
-    $resp = $_POST['responsibility_level'];
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-    $sql = "INSERT INTO staff (index_number, full_names, email, current_location, education_level, duty_station, remote_work, software_expertise, expertise_level, language, responsibility_level) 
-            VALUES ('$index', '$name', '$email', '$loc', '$edu', '$duty', '$remote', '$soft', '$level', '$lang', '$resp')";
+include('db.php'); 
+
+if(isset($_POST['submit'])) {
+    // We use mysqli_real_escape_string to prevent single quotes in data (like "O'Connor") from breaking the SQL
+    $index = mysqli_real_escape_string($conn, $_POST['index_number']);
+    $name  = mysqli_real_escape_string($conn, $_POST['full_names']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $loc   = mysqli_real_escape_string($conn, $_POST['current_location']);
+    $edu   = mysqli_real_escape_string($conn, $_POST['education_level']);
+    $duty  = mysqli_real_escape_string($conn, $_POST['duty_station']);
+    $rem   = mysqli_real_escape_string($conn, $_POST['remote_work']);
+    $soft  = mysqli_real_escape_string($conn, $_POST['software_expertise']);
+    $lvl   = mysqli_real_escape_string($conn, $_POST['expertise_level']);
+    $lang  = mysqli_real_escape_string($conn, $_POST['language']);
+    $resp  = mysqli_real_escape_string($conn, $_POST['responsibility_level']);
+
+    // REMOVED single quotes from columns. ADDED backticks to `language` because it's a reserved word.
+    $sql = "INSERT INTO staff (index_number, full_names, email, current_location, education_level, duty_station, remote_work, software_expertise, expertise_level, `language`, responsibility_level) 
+            VALUES ('$index', '$name', '$email', '$loc', '$edu', '$duty', '$rem', '$soft', '$lvl', '$lang', '$resp')";
     
-    if(mysqli_query($conn, $sql)) { header("Location: index.php"); }
+    if(mysqli_query($conn, $sql)) { 
+        header("Location: index.php"); 
+        exit();
+    } else {
+        echo "Error: " . mysqli_error($conn);
+    }
 }
 ?>
 <!DOCTYPE html>
