@@ -19,7 +19,7 @@ if(isset($_POST['submit'])) {
     $lang  = mysqli_real_escape_string($conn, $_POST['language']);
     $resp  = mysqli_real_escape_string($conn, $_POST['responsibility_level']);
 
-    // REMOVED single quotes from columns. ADDED backticks to `language` because it's a reserved word.
+    // ADDED backticks to `language` because it's a reserved word.
     $sql = "INSERT INTO staff (index_number, full_names, email, current_location, education_level, duty_station, remote_work, software_expertise, expertise_level, `language`, responsibility_level) 
             VALUES ('$index', '$name', '$email', '$loc', '$edu', '$duty', '$rem', '$soft', '$lvl', '$lang', '$resp')";
     
